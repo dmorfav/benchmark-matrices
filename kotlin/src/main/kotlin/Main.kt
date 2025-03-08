@@ -95,7 +95,7 @@ fun registrarResultados(matrixSize: Int, iterations: Int, times: List<Double>, a
         }
         
         val individualTimesStr = times.joinToString(" ") { "%.6f".format(it) }
-        writer.write("Kotlin,$matrixSize,$iterations,\"$individualTimesStr\",%.6f\n".format(averageTime))
+        writer.write("Kotlin,$matrixSize,$iterations,$individualTimesStr,%.6f\n".format(averageTime))
     }
 }
 
