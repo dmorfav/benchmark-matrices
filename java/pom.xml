@@ -1,0 +1,7 @@
+<!-- Archivo de configuración para Maven -->
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example</groupId>
+    <artifactId>benchmark</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</project>
