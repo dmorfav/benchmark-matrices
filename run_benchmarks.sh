@@ -15,7 +15,7 @@ PROJECT_ROOT=$(pwd)
 
 # Parámetros por defecto
 ITERATIONS=10
-MATRIX_SIZES=(100 250 500 750 1000, 5000, 10000)
+MATRIX_SIZES=(100 250 500 750 1000 5000 10000)
 
 # Función para mostrar ayuda
 show_help() {
@@ -23,7 +23,7 @@ show_help() {
     echo "Opciones:"
     echo "  -h, --help             Muestra esta ayuda"
     echo "  -i, --iterations NUM   Establece el número de iteraciones (por defecto: 10)"
-    echo "  -s, --sizes SIZES      Establece los tamaños de matriz separados por comas (por defecto: 100,250,500,750,1000)"
+    echo "  -s, --sizes SIZES      Establece los tamaños de matriz separados por comas (por defecto: 100,250,500,750,1000, 5000, 10000)"
     echo "  -g, --generate         Genera nuevas matrices antes de ejecutar los benchmarks"
     echo "  --no-cpp               Omite el benchmark de C++"
     echo "  --no-csharp            Omite el benchmark de C#"
