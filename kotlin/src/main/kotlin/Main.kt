@@ -8,6 +8,7 @@ import kotlinx.serialization.encodeToString
 import java.io.FileWriter
 import kotlin.system.exitProcess
 import kotlin.system.measureTimeMillis
+import java.util.Locale
 
 /**
  * Implementación naïve de la multiplicación de matrices en Kotlin.
@@ -70,7 +71,7 @@ fun measureMultiplication(matrixA: List<List<Double>>, matrixB: List<List<Double
         // Mostrar progreso cada 20% o si es la última iteración
         if (i % progressStep == 0 || i == iterations - 1) {
             val progressPercent = (i.toDouble() / iterations) * 100.0
-            println("Progreso: Iteración ${i + 1}/$iterations (%.1f%%)".format(progressPercent))
+            println("Progreso: Iteración ${i + 1}/$iterations (%.1f%%)".format(Locale.US, progressPercent))
         }
         
         val startTime = System.nanoTime()
@@ -106,8 +107,8 @@ fun registrarResultados(matrixSize: Int, iterations: Int, times: List<Double>, a
             writer.write("language,matrix_size,iterations,individual_times,average_time\n")
         }
         
-        val individualTimesStr = times.joinToString(" ") { "%.6f".format(it) }
-        writer.write("Kotlin,$matrixSize,$iterations,$individualTimesStr,%.6f\n".format(averageTime))
+        val individualTimesStr = times.joinToString(" ") { "%.6f".format(Locale.US, it) }
+        writer.write("Kotlin,$matrixSize,$iterations,$individualTimesStr,%.6f\n".format(Locale.US, averageTime))
     }
 }
 
@@ -150,8 +151,8 @@ fun main(args: Array<String>) {
     val (averageTime, times) = measureMultiplication(matrixA, matrixB, iterations)
     
     println("Tiempos de cada iteración (en segundos):")
-    times.forEach { println("%.6f".format(it)) }
-    println("Tiempo promedio: %.6f segundos".format(averageTime))
+    times.forEach { println("%.6f".format(Locale.US, it)) }
+    println("Tiempo promedio: %.6f segundos".format(Locale.US, averageTime))
     
     // Registrar resultados para su posterior comparación
     registrarResultados(n, iterations, times, averageTime)
