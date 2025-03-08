@@ -1,49 +1,93 @@
 # Benchmark de Multiplicación de Matrices
 
-## Descripción
+## Resumen
 
-Este proyecto realiza un benchmark de la multiplicación de matrices utilizando diferentes lenguajes de programación. Incluye implementaciones en C++, Go, Java, Kotlin y Python.
+Este proyecto realiza un benchmark de multiplicación de matrices "naive" (ingenua) utilizando diferentes lenguajes de programación. El objetivo es comparar el rendimiento en la ejecución de un mismo algoritmo implementado en C++, C#, Go, Java, Kotlin, Node.js, Python y Swift.
+
+Se busca evidenciar las diferencias inherentes a cada lenguaje, ya sea por su naturaleza compilada o interpretada, la optimización de su runtime (o JVM en el caso de Java y Kotlin) y las características de desarrollo propias. Se utiliza un algoritmo clásico de complejidad O(n³) para resaltar cómo el lenguaje y el entorno de ejecución afectan la eficiencia computacional.
+
+## Descripción del Algoritmo
+
+### Fundamento Matemático
+
+Dadas dos matrices cuadradas A y B de dimensión n × n, el producto de ambas se define matemáticamente como:
+
+```
+C[i][j] = ∑ₖ₌₀ⁿ⁻¹ A[i][k] × B[k][j]
+```
+
+Para 0 ≤ i, j < n.
+
+### Proceso y Complejidad
+
+El algoritmo implementado en todos los lenguajes sigue estos pasos:
+
+1. **Entrada**: Dos matrices A y B generadas con valores numéricos aleatorios.
+2. **Inicialización**: Crear una matriz C de n × n con valores inicializados a cero.
+3. **Cálculo**: Mediante tres bucles anidados, calcular cada elemento C[i][j] acumulando el producto de los correspondientes elementos de A y B.
+4. **Salida**: La matriz resultante C.
+
+La implementación utiliza tres bucles, cada uno iterando n veces, lo que determina una complejidad temporal de O(n³). Este crecimiento cúbico en el número de operaciones hace que el problema sea ideal para evaluar el rendimiento bajo diferentes entornos y lenguajes.
 
 ## Estructura del Proyecto
 
 ```
 benchmark-matrices/
-├─ cpp/
+├─ cpp/                      # Implementación en C++
 │  ├─ main.cpp
 │  └─ README.md
-├─ data/
+├─ csharp/                   # Implementación en C#
+│  ├─ main.cs
+│  ├─ MatrixBenchmark.csproj
+│  └─ README.md
+├─ data/                     # Matrices de prueba pre-generadas
+│  ├─ matrix_A_100.json
 │  ├─ matrix_A_1000.json
+│  ├─ matrix_A_10000.json
+│  ├─ matrix_A_250.json
 │  ├─ matrix_A_500.json
+│  ├─ matrix_A_5000.json
+│  ├─ matrix_A_750.json
+│  ├─ matrix_B_100.json
 │  ├─ matrix_B_1000.json
-│  └─ matrix_B_500.json
-├─ dataset/
+│  ├─ matrix_B_10000.json
+│  ├─ matrix_B_250.json
+│  ├─ matrix_B_500.json
+│  ├─ matrix_B_5000.json
+│  └─ matrix_B_750.json
+├─ dataset/                  # Script para generar nuevas matrices
 │  └─ generar_dataset.py
-├─ go/
+├─ go/                       # Implementación en Go
 │  ├─ go.mod
 │  ├─ main.go
-│  ├─ matrix_benchmark
 │  └─ README.md
-├─ java/
+├─ java/                     # Implementación en Java
 │  ├─ src/
 │  │  └─ Main.java
 │  ├─ compile.sh
 │  ├─ pom.xml
 │  └─ README.md
-├─ kotlin/
+├─ kotlin/                   # Implementación en Kotlin
 │  ├─ src/
 │  │  └─ Main.kt
 │  ├─ build.gradle.kts
 │  └─ README.md
-├─ nodejs/
+├─ nodejs/                   # Implementación en Node.js
 │  ├─ main.js
 │  └─ README.md
-├─ python/
+├─ python/                   # Implementación en Python
 │  ├─ main.py
 │  └─ README.md
-├─ results/
+├─ results/                  # Directorio para almacenar resultados
+│  ├─ benchmark_cpp_results.csv
+│  ├─ benchmark_csharp_results.csv
 │  ├─ benchmark_go_results.csv
-│  └─ benchmark_python_results.csv
-├─ swift/
+│  ├─ benchmark_java_results.csv
+│  ├─ benchmark_kotlin_results.csv
+│  ├─ benchmark_nodejs_results.csv
+│  ├─ benchmark_python_results.csv
+│  └─ benchmark_swift_results.csv
+├─ swift/                    # Implementación en Swift
 │  ├─ main.swift
 │  ├─ Package.swift
 │  └─ README.md
@@ -52,94 +96,188 @@ benchmark-matrices/
 └─ README.md
 ```
 
-## Requisitos
+## Lenguajes Evaluados
 
-- Python 3.x
-- Go 1.x
-- Java 11+
-- Kotlin 1.5+
-- Node.js 14+
-- Swift 5+
+Se seleccionaron los siguientes lenguajes, representativos de distintos paradigmas y modelos de ejecución:
 
-## Instalación
+- **Go**: Lenguaje compilado con fuerte soporte para concurrencia.
+- **Python**: Lenguaje interpretado; en este benchmark se utiliza una implementación en puro Python (sin librerías como NumPy).
+- **C++**: Lenguaje compilado de alto rendimiento, tradicional en cálculos intensivos.
+- **C#**: Lenguaje compilado que se ejecuta sobre .NET runtime, ofreciendo un balance entre rendimiento y facilidad de desarrollo.
+- **Node.js**: Ambiente de ejecución para JavaScript, cuyo carácter interpretado y orientado a eventos presenta un caso de estudio interesante.
+- **Java**: Ejecutado sobre la JVM, aprovechando las ventajas del JIT (Just-In-Time Compilation).
+- **Kotlin**: Lenguaje moderno que se ejecuta sobre la JVM, permitiendo explorar las ventajas del JIT y la comparabilidad con Java.
+- **Swift**: Lenguaje compilado, con un enfoque moderno en el desarrollo, evaluado en su versión "pura" para computación intensiva.
+
+## Metodología Experimental
+
+### Generación de Datos de Prueba
+
+- **Matrices de Prueba**: Se generan matrices de dimensiones n × n (500×500 y 1000×1000 por defecto) utilizando números aleatorios.
+- **Reproducibilidad**: Se utiliza una semilla fija en el generador de números aleatorios para asegurar la reproducibilidad de los experimentos.
+
+### Medición del Rendimiento
+
+- **Temporización de Alta Precisión**: Cada lenguaje utiliza funciones de medición de tiempo de alta resolución nativas.
+- **Repeticiones y Promedio**: Se realizan múltiples iteraciones (10 por defecto) y se calcula el promedio para mitigar variaciones debidas a condiciones del entorno.
+- **Ambiente Controlado**: Se recomienda ejecutar los benchmarks en un entorno homogéneo (misma máquina, sin procesos intensivos concurrentes) para asegurar la comparabilidad de resultados.
+
+## Requisitos Generales
+
+Cada implementación requiere su propio entorno de desarrollo. A continuación se detallan los requisitos para cada lenguaje:
+
+- **Python**: 3.6 o superior
+- **Go**: 1.15 o superior
+- **Java**: JDK 11 o superior
+- **Kotlin**: JDK 21 o superior
+- **Node.js**: 14.x o superior
+- **Swift**: 5.3 o superior (macOS 10.15+)
+- **C++**: Compilador compatible con C++11 o superior
+- **C#**: .NET SDK 6.0 o superior
+
+## Generación del Dataset
+
+Para generar nuevas matrices de prueba, utilice el script `dataset/generar_dataset.py`:
+
+```bash
+cd dataset
+python generar_dataset.py
+```
+
+Por defecto, este script genera matrices de 500×500 y 1000×1000 con una semilla fija (42) para asegurar la reproducibilidad. Puede modificar el script para generar matrices de otros tamaños.
+
+## Instalación y Ejecución
+
+Cada implementación tiene sus propias instrucciones de instalación y ejecución. Todas aceptan parámetros similares:
+
+- `--n`, `-n`: Dimensión de las matrices cuadradas (por defecto: 500)
+- `--iterations`, `-i`: Número de iteraciones para medir el tiempo promedio (por defecto: 10)
 
 ### Python
 
 ```bash
-pip install -r requirements.txt
+cd python
+python main.py --n 500 --iterations 10
 ```
 
 ### Go
 
 ```bash
-go mod tidy
+cd go
+go build -o matrix_benchmark
+./matrix_benchmark -n 500 -iterations 10
 ```
 
 ### Java
 
 ```bash
-mvn clean install
+cd java
+./compile.sh
+java -jar target/benchmark.jar --n 500 --iterations 10
 ```
 
 ### Kotlin
 
 ```bash
-./gradlew build
+cd kotlin
+./gradlew run --args="--n 500 --iterations 10"
 ```
 
 ### Node.js
 
 ```bash
+cd nodejs
 npm install
+node main.js -n 500 -i 10
 ```
 
 ### Swift
 
 ```bash
-swift build
+cd swift
+swift run -c release benchmark -- --n 500 --iterations 10
 ```
 
-## Ejecución
-
-### Python
+### C++
 
 ```bash
-python main.py
+cd cpp
+g++ -std=c++11 -O3 main.cpp -o matrix_benchmark
+./matrix_benchmark --n 500 --iterations 10
 ```
 
-### Go
+### C#
 
 ```bash
-go run main.go
+cd csharp
+dotnet build
+dotnet run --n 500 --iterations 10
 ```
 
-### Java
+## Formato de Resultados
 
-```bash
-java -jar target/benchmark.jar
+Los resultados de cada benchmark se guardan en archivos CSV individuales en el directorio `results/` con el siguiente formato:
+
+```
+language,matrix_size,iterations,individual_times,average_time
+Python,500,10,0.123456 0.123457 ...,0.123456
 ```
 
-### Kotlin
+Cada archivo contiene:
+- `language`: El lenguaje utilizado
+- `matrix_size`: Dimensión de las matrices (n)
+- `iterations`: Número de iteraciones realizadas
+- `individual_times`: Tiempos individuales de cada iteración (en segundos)
+- `average_time`: Tiempo promedio de todas las iteraciones (en segundos)
 
-```bash
-./gradlew run
+## Comparación de Resultados
+
+Para comparar los resultados entre diferentes lenguajes, puede:
+
+1. Ejecutar los benchmarks con los mismos parámetros (tamaño de matriz e iteraciones)
+2. Recopilar los archivos CSV del directorio `results/`
+3. Utilizar una herramienta de análisis de datos (como pandas en Python) para cargar y comparar los tiempos promedios
+
+Ejemplo de script para comparar resultados (no incluido en el repositorio):
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import glob
+
+# Cargar todos los resultados
+dataframes = []
+for file in glob.glob('results/benchmark_*_results.csv'):
+    df = pd.read_csv(file)
+    dataframes.append(df)
+
+# Combinar resultados
+combined = pd.concat(dataframes)
+
+# Graficar comparación
+plt.figure(figsize=(12, 6))
+plt.bar(combined['language'], combined['average_time'])
+plt.title('Comparación de Tiempos de Ejecución')
+plt.xlabel('Lenguaje de Programación')
+plt.ylabel('Tiempo Promedio (s)')
+plt.yscale('log')  # Escala logarítmica para mejor visualización
+plt.savefig('comparison.png')
+plt.show()
 ```
 
-### Node.js
+## Resultados Esperados
 
-```bash
-node main.js
-```
+Aunque los resultados específicos dependerán de la implementación y el entorno de ejecución, se espera observar:
 
-### Swift
+- **Lenguajes Compilados Nativos (C++, Go, Swift)**: Generalmente ofrecerán los tiempos de ejecución más rápidos debido a la optimización en tiempo de compilación y la generación de código nativo.
+- **Lenguajes con Compilación JIT (Java, Kotlin, C#)**: Podrán alcanzar rendimientos competitivos gracias a la optimización JIT que ofrecen sus respectivos runtimes (.NET para C# y JVM para Java/Kotlin).
+- **Lenguajes Interpretados (Python, Node.js)**: Se espera que tengan tiempos de ejecución significativamente mayores debido a la sobrecarga de la interpretación.
 
-```bash
-swift run
-```
+## Conclusiones
 
-## Resultados
+Este benchmark evidencia que la elección del lenguaje de programación impacta de forma significativa el rendimiento en problemas computacionales intensivos como la multiplicación de matrices naive.
 
-Los resultados se guardan en el archivo `results/benchmark_results.csv`.
+La comparación directa entre estos lenguajes resalta la importancia de seleccionar el lenguaje adecuado según las necesidades del proyecto: mientras que la rapidez de ejecución es crucial en aplicaciones de alto rendimiento, otros factores como la facilidad de desarrollo y el ecosistema de herramientas pueden ser determinantes en proyectos de distinta índole.
 
 ## Contribución
 
@@ -150,6 +288,12 @@ Para contribuir al proyecto, sigue estos pasos:
 3. Realiza tus cambios y haz commit.
 4. Haz push a tu rama.
 5. Crea un Pull Request.
+
+## Futuras Líneas de Investigación
+
+- **Optimización Algorítmica**: Comparar la implementación naive con versiones optimizadas (por ejemplo, bloqueada o utilizando técnicas de paralelización).
+- **Análisis del Impacto de la Concurrencia**: Evaluar cómo la ejecución en múltiples hilos afecta el rendimiento en cada lenguaje.
+- **Benchmarking en Diferentes Entornos**: Realizar pruebas en diversos sistemas operativos y arquitecturas de hardware.
 
 ## Licencia
 
