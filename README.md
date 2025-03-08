@@ -33,14 +33,23 @@ La implementación utiliza tres bucles, cada uno iterando n veces, lo que determ
 
 ```
 benchmark-matrices/
-├─ cpp/                      # Implementación en C++
+├─ analysis/
+│  ├─ resultados_analisis/
+│  ├─ analizar_resultados.py
+│  ├─ ejecutar_analisis.bat
+│  ├─ ejecutar_analisis.sh
+│  ├─ requirements.txt
+│  ├─ setup_env.bat
+│  └─ setup_env.sh
+├─ cpp/ # C++
 │  ├─ main.cpp
+│  ├─ matrix_benchmark
 │  └─ README.md
-├─ csharp/                   # Implementación en C#
+├─ csharp/ # C#
 │  ├─ main.cs
 │  ├─ MatrixBenchmark.csproj
 │  └─ README.md
-├─ data/                     # Matrices de prueba pre-generadas
+├─ data/ # Datos de prueba
 │  ├─ matrix_A_100.json
 │  ├─ matrix_A_1000.json
 │  ├─ matrix_A_10000.json
@@ -55,45 +64,49 @@ benchmark-matrices/
 │  ├─ matrix_B_500.json
 │  ├─ matrix_B_5000.json
 │  └─ matrix_B_750.json
-├─ dataset/                  # Script para generar nuevas matrices
+├─ dataset/ # Datos de prueba
 │  └─ generar_dataset.py
-├─ go/                       # Implementación en Go
+├─ go/ # Go
 │  ├─ go.mod
 │  ├─ main.go
+│  ├─ matrix_benchmark
 │  └─ README.md
-├─ java/                     # Implementación en Java
+├─ java/ # Java
+│  ├─ java/
+│  │  └─ src/
+│  │     └─ benchmark/
 │  ├─ src/
-│  │  └─ Main.java
+│  │  └─ benchmark/
+│  │     └─ Main.java
 │  ├─ compile.sh
 │  ├─ pom.xml
 │  └─ README.md
-├─ kotlin/                   # Implementación en Kotlin
+├─ kotlin/ # Kotlin
 │  ├─ src/
-│  │  └─ Main.kt
+│  │  └─ main/
+│  │     └─ kotlin/
+│  │        └─ Main.kt
 │  ├─ build.gradle.kts
 │  └─ README.md
-├─ nodejs/                   # Implementación en Node.js
+├─ nodejs/ # Node.js
 │  ├─ main.js
+│  ├─ package-lock.json
+│  ├─ package.json
 │  └─ README.md
-├─ python/                   # Implementación en Python
+├─ python/ # Python
 │  ├─ main.py
 │  └─ README.md
-├─ results/                  # Directorio para almacenar resultados
-│  ├─ benchmark_cpp_results.csv
-│  ├─ benchmark_csharp_results.csv
-│  ├─ benchmark_go_results.csv
-│  ├─ benchmark_java_results.csv
-│  ├─ benchmark_kotlin_results.csv
-│  ├─ benchmark_nodejs_results.csv
-│  ├─ benchmark_python_results.csv
-│  └─ benchmark_swift_results.csv
-├─ swift/                    # Implementación en Swift
-│  ├─ main.swift
+├─ results/ # Resultados
+├─ swift/
+│  ├─ Sources/
+│  │  └─ Benchmark/
+│  │     └─ main.swift
 │  ├─ Package.swift
 │  └─ README.md
 ├─ .gitignore
 ├─ LICENSE
-└─ README.md
+├─ README.md
+└─ run_benchmarks.sh
 ```
 
 ## Lenguajes Evaluados
