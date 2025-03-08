@@ -113,7 +113,7 @@ Se seleccionaron los siguientes lenguajes, representativos de distintos paradigm
 
 ### Generación de Datos de Prueba
 
-- **Matrices de Prueba**: Se generan matrices de dimensiones n × n (500×500 y 1000×1000 por defecto) utilizando números aleatorios.
+- **Matrices de Prueba**: Se generan matrices de dimensiones n × n (500×500 y 1000×1000 por ejemplo) utilizando números aleatorios.
 - **Reproducibilidad**: Se utiliza una semilla fija en el generador de números aleatorios para asegurar la reproducibilidad de los experimentos.
 
 ### Medición del Rendimiento
@@ -144,11 +144,35 @@ cd dataset
 python generar_dataset.py
 ```
 
-Por defecto, este script genera matrices de 500×500 y 1000×1000 con una semilla fija (42) para asegurar la reproducibilidad. Puede modificar el script para generar matrices de otros tamaños.
+Por defecto, este script genera matrices de 100x100, 250x250, 500x500, 750x750, 1000x1000, 5000x5000 y 10000x10000 con una semilla fija (42) para asegurar la reproducibilidad. Puede modificar el script para generar matrices de otros tamaños.
 
 ## Instalación y Ejecución
 
-Cada implementación tiene sus propias instrucciones de instalación y ejecución. Todas aceptan parámetros similares:
+### Ejecutar Todos los Benchmarks a la Vez
+
+El proyecto incluye un script que permite ejecutar todos los benchmarks en secuencia:
+
+```bash
+./run_benchmarks.sh
+```
+
+Este script acepta varias opciones:
+
+- `-h, --help`: Muestra ayuda sobre el uso del script
+- `-i, --iterations NUM`: Establece el número de iteraciones (por defecto: 10)
+- `-s, --sizes SIZES`: Establece los tamaños de matriz separados por comas (por defecto: 100,250,500,750,1000)
+- `-g, --generate`: Genera nuevas matrices antes de ejecutar los benchmarks
+- `--no-cpp, --no-csharp, --no-go, etc.`: Permite omitir benchmarks específicos
+- `--no-analysis`: Omite el análisis final de resultados
+
+Ejemplo:
+```bash
+./run_benchmarks.sh -i 5 -s 100,500,1000 --no-swift --no-csharp
+```
+
+### Ejecutar Benchmarks Individuales
+
+Alternativamente, cada implementación tiene sus propias instrucciones de instalación y ejecución. Todas aceptan parámetros similares:
 
 - `--n`, `-n`: Dimensión de las matrices cuadradas (por defecto: 500)
 - `--iterations`, `-i`: Número de iteraciones para medir el tiempo promedio (por defecto: 10)
@@ -230,40 +254,32 @@ Cada archivo contiene:
 - `individual_times`: Tiempos individuales de cada iteración (en segundos)
 - `average_time`: Tiempo promedio de todas las iteraciones (en segundos)
 
+## Análisis de Resultados
+
+El proyecto incluye scripts para analizar y visualizar los resultados de los benchmarks. Después de ejecutar los benchmarks, puede generar un análisis automático:
+
+```bash
+cd analysis
+./ejecutar_analisis.sh
+```
+
+El análisis genera:
+
+- Tablas comparativas de rendimiento entre lenguajes
+- Gráficos de barras para comparar tiempos de ejecución
+- Análisis de escalabilidad (cómo crece el tiempo de ejecución con el tamaño de la matriz)
+- Gráficos de desviación estándar para evaluar la consistencia de los benchmarks
+- Información sobre tiempo mínimo, máximo y desviación estándar de cada lenguaje
+
+Los resultados del análisis se guardan en el directorio `analysis/resultados_analisis/`.
+
 ## Comparación de Resultados
 
 Para comparar los resultados entre diferentes lenguajes, puede:
 
-1. Ejecutar los benchmarks con los mismos parámetros (tamaño de matriz e iteraciones)
-2. Recopilar los archivos CSV del directorio `results/`
-3. Utilizar una herramienta de análisis de datos (como pandas en Python) para cargar y comparar los tiempos promedios
-
-Ejemplo de script para comparar resultados (no incluido en el repositorio):
-
-```python
-import pandas as pd
-import matplotlib.pyplot as plt
-import glob
-
-# Cargar todos los resultados
-dataframes = []
-for file in glob.glob('results/benchmark_*_results.csv'):
-    df = pd.read_csv(file)
-    dataframes.append(df)
-
-# Combinar resultados
-combined = pd.concat(dataframes)
-
-# Graficar comparación
-plt.figure(figsize=(12, 6))
-plt.bar(combined['language'], combined['average_time'])
-plt.title('Comparación de Tiempos de Ejecución')
-plt.xlabel('Lenguaje de Programación')
-plt.ylabel('Tiempo Promedio (s)')
-plt.yscale('log')  # Escala logarítmica para mejor visualización
-plt.savefig('comparison.png')
-plt.show()
-```
+1. Ejecutar todos los benchmarks con `./run_benchmarks.sh`
+2. Revisar el análisis automático generado en `analysis/resultados_analisis/`
+3. O utilizar los archivos CSV en el directorio `results/` para análisis personalizados
 
 ## Resultados Esperados
 
