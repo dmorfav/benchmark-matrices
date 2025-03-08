@@ -15,7 +15,7 @@ PROJECT_ROOT=$(pwd)
 
 # Parámetros por defecto
 ITERATIONS=10
-MATRIX_SIZES=(100 250 500 750 1000)
+MATRIX_SIZES=(100 250 500 750 1000, 5000, 10000)
 
 # Función para mostrar ayuda
 show_help() {
@@ -188,7 +188,13 @@ for size in "${MATRIX_SIZES[@]}"; do
     if [ "$RUN_CSHARP" = true ]; then
         if verify_dir "${PROJECT_ROOT}/csharp"; then
             cd "${PROJECT_ROOT}/csharp"
-            run_benchmark "C#" "dotnet run --n $size --iterations $ITERATIONS" "$size"
+            echo -e "${BLUE}Compilando benchmark de C#...${NC}"
+            dotnet build -c Release
+            if [ $? -eq 0 ]; then
+                run_benchmark "C#" "dotnet run -c Release --no-build --n $size --iterations $ITERATIONS" "$size"
+            else
+                echo -e "${RED}No se pudo compilar el benchmark de C#.${NC}"
+            fi
             cd "${PROJECT_ROOT}"
         fi
     fi
@@ -281,7 +287,7 @@ for size in "${MATRIX_SIZES[@]}"; do
     if [ "$RUN_PYTHON" = true ]; then
         if verify_dir "${PROJECT_ROOT}/python"; then
             cd "${PROJECT_ROOT}/python"
-            run_benchmark "Python" "python main.py --n $size --iterations $ITERATIONS" "$size"
+            run_benchmark "Python" "python3 main.py --n $size --iterations $ITERATIONS" "$size"
             cd "${PROJECT_ROOT}"
         fi
     fi
