@@ -21,7 +21,8 @@ def analizar_resultados_benchmark():
         return
     
     # Crear directorio para guardar los resultados del análisis
-    os.makedirs('.', exist_ok=True)  # Ya estamos en analysis, solo aseguramos que exista
+    results_dir = 'resultados_analisis'
+    os.makedirs(results_dir, exist_ok=True)
     
     # Dataframe para almacenar todos los resultados combinados
     all_results = pd.DataFrame()
@@ -77,16 +78,16 @@ def analizar_resultados_benchmark():
     all_results['relative_performance'] = all_results['average_time'] / all_results['fastest_time']
     
     # Guardar dataframe combinado para análisis posteriores
-    all_results.to_csv('combined_results.csv', index=False)
+    all_results.to_csv(os.path.join(results_dir, 'combined_results.csv'), index=False)
     
     # Generar análisis y visualizaciones
-    generar_informe_general(all_results)
-    generar_visualizaciones(all_results)
-    analizar_escalabilidad(all_results)
+    generar_informe_general(all_results, results_dir)
+    generar_visualizaciones(all_results, results_dir)
+    analizar_escalabilidad(all_results, results_dir)
     
-    print("Análisis completado. Los resultados se encuentran en el directorio 'analysis'.")
+    print(f"Análisis completado. Los resultados se encuentran en el directorio '{results_dir}'.")
     
-def generar_informe_general(df):
+def generar_informe_general(df, results_dir):
     """
     Genera un informe general con las métricas principales para cada lenguaje y tamaño.
     """
@@ -103,10 +104,10 @@ def generar_informe_general(df):
     metrics = metrics.sort_values(['matrix_size', 'average_time'])
     
     # Guardar el informe como CSV
-    metrics.to_csv('metrics_summary.csv', index=False)
+    metrics.to_csv(os.path.join(results_dir, 'metrics_summary.csv'), index=False)
     
     # Generar informe en formato texto
-    with open('benchmark_report.txt', 'w') as f:
+    with open(os.path.join(results_dir, 'benchmark_report.txt'), 'w') as f:
         f.write("INFORME DE BENCHMARK DE MULTIPLICACIÓN DE MATRICES\n")
         f.write("=" * 60 + "\n\n")
         
@@ -129,7 +130,7 @@ def generar_informe_general(df):
             
             f.write("\n\n")
     
-def generar_visualizaciones(df):
+def generar_visualizaciones(df, results_dir):
     """
     Genera visualizaciones para facilitar la comparación entre lenguajes.
     """
@@ -151,7 +152,7 @@ def generar_visualizaciones(df):
         plt.xticks(rotation=45)
         plt.tight_layout()
     
-    plt.savefig('avg_time_by_language.png')
+    plt.savefig(os.path.join(results_dir, 'avg_time_by_language.png'))
     
     # 2. Gráfico de rendimiento relativo
     plt.figure(figsize=(15, 10))
@@ -167,7 +168,7 @@ def generar_visualizaciones(df):
         plt.xticks(rotation=45)
         plt.tight_layout()
     
-    plt.savefig('relative_performance.png')
+    plt.savefig(os.path.join(results_dir, 'relative_performance.png'))
     
     # 3. Gráfico de tiempos mínimos, promedio y máximos
     plt.figure(figsize=(15, 10))
@@ -188,7 +189,7 @@ def generar_visualizaciones(df):
         plt.xticks(rotation=45)
         plt.tight_layout()
     
-    plt.savefig('time_variation.png')
+    plt.savefig(os.path.join(results_dir, 'time_variation.png'))
     
     # 4. Gráfico de desviación estándar
     plt.figure(figsize=(15, 10))
@@ -204,9 +205,9 @@ def generar_visualizaciones(df):
         plt.xticks(rotation=45)
         plt.tight_layout()
     
-    plt.savefig('std_deviation.png')
+    plt.savefig(os.path.join(results_dir, 'std_deviation.png'))
     
-def analizar_escalabilidad(df):
+def analizar_escalabilidad(df, results_dir):
     """
     Analiza cómo escala cada lenguaje al aumentar el tamaño de la matriz.
     """
@@ -229,7 +230,7 @@ def analizar_escalabilidad(df):
     plt.grid(True)
     plt.tight_layout()
     
-    plt.savefig('scalability_linear.png')
+    plt.savefig(os.path.join(results_dir, 'scalability_linear.png'))
     
     # También mostrar en escala logarítmica para mejor visualización
     plt.figure(figsize=(12, 8))
@@ -249,7 +250,7 @@ def analizar_escalabilidad(df):
     plt.grid(True)
     plt.tight_layout()
     
-    plt.savefig('scalability_log.png')
+    plt.savefig(os.path.join(results_dir, 'scalability_log.png'))
     
     # Análisis de complejidad
     # Para cada lenguaje, intentar ajustar una curva cúbica (O(n³))
@@ -301,7 +302,7 @@ def analizar_escalabilidad(df):
         except Exception as e:
             print(f"Error en el análisis de complejidad para {language}: {str(e)}")
     
-    plt.savefig('complexity_analysis.png')
+    plt.savefig(os.path.join(results_dir, 'complexity_analysis.png'))
     
     # Guardar los coeficientes de complejidad para cada lenguaje
     complexity_data = []
@@ -349,7 +350,7 @@ def analizar_escalabilidad(df):
     
     # Guardar resultados del análisis de complejidad
     complexity_df = pd.DataFrame(complexity_data)
-    complexity_df.to_csv('complexity_results.csv', index=False)
+    complexity_df.to_csv(os.path.join(results_dir, 'complexity_results.csv'), index=False)
 
 if __name__ == "__main__":
     analizar_resultados_benchmark()
