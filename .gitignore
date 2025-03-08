@@ -8,3 +8,4 @@ kotlin/out/
 kotlin/gradle/
 kotlin/gradlew
 kotlin/gradlew.bat
+*.class
