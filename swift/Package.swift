@@ -2,8 +2,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "BenchmarkSwift",
+    name: "BenchmarkMatrices",
+    platforms: [
+        .macOS(.v10_15)
+    ],
+    products: [
+        .executable(name: "benchmark", targets: ["Benchmark"])
+    ],
     targets: [
-        .target(name: "BenchmarkSwift", dependencies: [])
+        .target(
+            name: "Benchmark",
+            path: "Sources/Benchmark",
+            sources: ["main.swift"]
+        )
     ]
 )
