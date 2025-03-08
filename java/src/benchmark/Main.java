@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
@@ -210,10 +211,10 @@ public class Main {
                 if (timesBuilder.length() > 0) {
                     timesBuilder.append(" ");
                 }
-                timesBuilder.append(String.format("%.6f", time));
+                timesBuilder.append(String.format(Locale.US, "%.6f", time));
             }
             
-            writer.write(String.format("Java,%d,%d,%s,%.6f\n", 
+            writer.write(String.format(Locale.US, "Java,%d,%d,%s,%.6f\n", 
                                      matrixSize, 
                                      iterations, 
                                      timesBuilder.toString(), 
