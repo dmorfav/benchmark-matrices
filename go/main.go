@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -56,13 +57,25 @@ func measureMultiplication(A, B [][]float64, iterations int) (float64, []float64
 	times := make([]float64, iterations)
 	var totalTime float64
 
+	// Calcular el incremento del 20%
+	progressStep := int(math.Max(1, float64(iterations/5)))
+	fmt.Printf("Iniciando multiplicación de matrices (%d iteraciones)...\n", iterations)
+
 	for i := 0; i < iterations; i++ {
+		// Mostrar progreso cada 20% o si es la última iteración
+		if i%progressStep == 0 || i == iterations-1 {
+			progressPercent := float64(i) / float64(iterations) * 100.0
+			fmt.Printf("Progreso: Iteración %d/%d (%.1f%%)\n", i+1, iterations, progressPercent)
+		}
+
 		start := time.Now()
 		_ = multiplyMatrices(A, B)
 		elapsed := time.Since(start).Seconds()
 		times[i] = elapsed
 		totalTime += elapsed
 	}
+
+	fmt.Println("Multiplicación de matrices completada (100%).")
 
 	averageTime := totalTime / float64(iterations)
 	return averageTime, times
@@ -168,10 +181,12 @@ func main() {
 	fmt.Printf("Ejecutando benchmark con %d iteraciones...\n", iterations)
 	averageTime, times := measureMultiplication(A, B, iterations)
 
+	// Mostrar los tiempos de cada iteración
 	fmt.Println("Tiempos de cada iteración (en segundos):")
-	for _, t := range times {
-		fmt.Printf("%.6f\n", t)
+	for _, time := range times {
+		fmt.Printf("%.6f\n", time)
 	}
+
 	fmt.Printf("Tiempo promedio: %.6f segundos\n", averageTime)
 
 	// Registrar resultados para su posterior comparación

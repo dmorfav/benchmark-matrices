@@ -162,7 +162,18 @@ std::pair<double, std::vector<double>> measure_multiplication(
 ) {
     std::vector<double> times;
     
+    // Calcular el incremento del 20%
+    int progress_step = std::max(1, iterations / 5);
+    std::cout << "Iniciando multiplicación de matrices (" << iterations << " iteraciones)..." << std::endl;
+    
     for (int i = 0; i < iterations; i++) {
+        // Mostrar progreso cada 20% o si es la última iteración
+        if (i % progress_step == 0 || i == iterations - 1) {
+            double progress_percent = (static_cast<double>(i) / iterations) * 100.0;
+            std::cout << "Progreso: Iteración " << (i + 1) << "/" << iterations 
+                      << " (" << std::fixed << std::setprecision(1) << progress_percent << "%)" << std::endl;
+        }
+        
         auto start_time = std::chrono::high_resolution_clock::now();
         multiply_matrices(matrix_a, matrix_b);
         auto end_time = std::chrono::high_resolution_clock::now();
@@ -171,6 +182,8 @@ std::pair<double, std::vector<double>> measure_multiplication(
         std::chrono::duration<double> elapsed = end_time - start_time;
         times.push_back(elapsed.count());
     }
+    
+    std::cout << "Multiplicación de matrices completada (100%)." << std::endl;
     
     // Calcular tiempo promedio
     double average_time = std::accumulate(times.begin(), times.end(), 0.0) / times.size();

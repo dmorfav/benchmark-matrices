@@ -47,13 +47,25 @@ func multiplyMatrices(matrixA: Matrix, matrixB: Matrix) -> Matrix {
 func measureMultiplication(matrixA: Matrix, matrixB: Matrix, iterations: Int) -> (averageTime: Double, times: [Double]) {
     var times = [Double]()
     
-    for _ in 0..<iterations {
+    // Calcular el incremento del 20%
+    let progressStep = max(1, iterations / 5)
+    print("Iniciando multiplicación de matrices (\(iterations) iteraciones)...")
+    
+    for i in 0..<iterations {
+        // Mostrar progreso cada 20% o si es la última iteración
+        if i % progressStep == 0 || i == iterations - 1 {
+            let progressPercent = Double(i) / Double(iterations) * 100.0
+            print(String(format: "Progreso: Iteración %d/%d (%.1f%%)", i + 1, iterations, progressPercent))
+        }
+        
         let startTime = Date()
         _ = multiplyMatrices(matrixA: matrixA, matrixB: matrixB)
         let endTime = Date()
         let timeInterval = endTime.timeIntervalSince(startTime)
         times.append(timeInterval)
     }
+    
+    print("Multiplicación de matrices completada (100%).")
     
     let averageTime = times.reduce(0, +) / Double(times.count)
     return (averageTime, times)

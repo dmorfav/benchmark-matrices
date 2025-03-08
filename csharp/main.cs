@@ -83,13 +83,26 @@ namespace MatrixBenchmark
             var times = new List<double>();
             var stopwatch = new Stopwatch();
             
+            // Calcular el incremento del 20%
+            int progressStep = Math.Max(1, iterations / 5);
+            Console.WriteLine($"Iniciando multiplicación de matrices ({iterations} iteraciones)...");
+            
             for (int i = 0; i < iterations; i++)
             {
+                // Mostrar progreso cada 20% o si es la última iteración
+                if (i % progressStep == 0 || i == iterations - 1)
+                {
+                    double progressPercent = (double)i / iterations * 100.0;
+                    Console.WriteLine($"Progreso: Iteración {i + 1}/{iterations} ({progressPercent:F1}%)");
+                }
+                
                 stopwatch.Restart();
                 MultiplyMatrices(matrixA, matrixB);
                 stopwatch.Stop();
                 times.Add(stopwatch.Elapsed.TotalSeconds);
             }
+            
+            Console.WriteLine("Multiplicación de matrices completada (100%).");
             
             double averageTime = times.Average();
             return (averageTime, times);

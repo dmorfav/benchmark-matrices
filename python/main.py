@@ -60,11 +60,22 @@ def measure_multiplication(matrix_a: List[List[float]], matrix_b: List[List[floa
     """
     times = []
     
-    for _ in range(iterations):
+    # Calcular el incremento del 20%
+    progress_step = max(1, iterations // 5)
+    print(f"Iniciando multiplicación de matrices ({iterations} iteraciones)...")
+    
+    for i in range(iterations):
+        # Mostrar progreso cada 20% o si es la última iteración
+        if i % progress_step == 0 or i == iterations - 1:
+            progress_percent = (i / iterations) * 100.0
+            print(f"Progreso: Iteración {i + 1}/{iterations} ({progress_percent:.1f}%)")
+        
         start_time = time.time()
         multiply_matrices(matrix_a, matrix_b)
         end_time = time.time()
         times.append(end_time - start_time)
+    
+    print("Multiplicación de matrices completada (100%).")
     
     average_time = sum(times) / len(times)
     return average_time, times

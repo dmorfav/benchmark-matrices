@@ -62,12 +62,24 @@ fun multiplyMatrices(matrixA: List<List<Double>>, matrixB: List<List<Double>>): 
 fun measureMultiplication(matrixA: List<List<Double>>, matrixB: List<List<Double>>, iterations: Int): Pair<Double, List<Double>> {
     val times = mutableListOf<Double>()
     
-    repeat(iterations) {
+    // Calcular el incremento del 20%
+    val progressStep = maxOf(1, iterations / 5)
+    println("Iniciando multiplicación de matrices ($iterations iteraciones)...")
+    
+    repeat(iterations) { i ->
+        // Mostrar progreso cada 20% o si es la última iteración
+        if (i % progressStep == 0 || i == iterations - 1) {
+            val progressPercent = (i.toDouble() / iterations) * 100.0
+            println("Progreso: Iteración ${i + 1}/$iterations (%.1f%%)".format(progressPercent))
+        }
+        
         val startTime = System.nanoTime()
         multiplyMatrices(matrixA, matrixB)
         val endTime = System.nanoTime()
         times.add((endTime - startTime) / 1_000_000_000.0) // Convertir nanosegundos a segundos
     }
+    
+    println("Multiplicación de matrices completada (100%).")
     
     val averageTime = times.average()
     return Pair(averageTime, times)

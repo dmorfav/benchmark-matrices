@@ -157,7 +157,17 @@ public class Main {
         List<Double> times = new ArrayList<>();
         double totalTime = 0;
         
+        // Calcular el incremento del 20%
+        int progressStep = Math.max(1, iterations / 5);
+        System.out.println("Iniciando multiplicación de matrices (" + iterations + " iteraciones)...");
+        
         for (int i = 0; i < iterations; i++) {
+            // Mostrar progreso cada 20% o si es la última iteración
+            if (i % progressStep == 0 || i == iterations - 1) {
+                double progressPercent = (double) i / iterations * 100.0;
+                System.out.printf("Progreso: Iteración %d/%d (%.1f%%)\n", i + 1, iterations, progressPercent);
+            }
+            
             long startTime = System.nanoTime();
             multiplyMatrices(matrixA, matrixB);
             long endTime = System.nanoTime();
@@ -166,6 +176,8 @@ public class Main {
             times.add(executionTime);
             totalTime += executionTime;
         }
+        
+        System.out.println("Multiplicación de matrices completada (100%).");
         
         double averageTime = totalTime / iterations;
         return new MeasurementResult(averageTime, times);
@@ -251,16 +263,17 @@ public class Main {
             LOGGER.info("Ejecutando benchmark con " + iterations + " iteraciones...");
             MeasurementResult result = measureMultiplication(matrixA, matrixB, iterations);
             
-            // Mostrar los tiempos de iteración de forma más compacta
-            String tiemposFormateados = result.times.stream()
-                .map(t -> String.format("%.6f", t))
-                .collect(Collectors.joining(", "));
-            LOGGER.info("Tiempos (segundos): [" + tiemposFormateados + "]");
+            // Ya no necesitamos imprimir esto, ya que nuestros mensajes de progreso lo harán
+            // Mostrar el tiempo promedio final
             LOGGER.info("Tiempo promedio: " + String.format("%.6f", result.averageTime) + " segundos");
             
-            // Registrar resultados para su posterior comparación
-            registrarResultados(n, iterations, result.times, result.averageTime);
-            LOGGER.info("Resultados registrados correctamente en 'results/benchmark_java_results.csv'.");
+            try {
+                registrarResultados(n, iterations, result.times, result.averageTime);
+                LOGGER.info("Resultados registrados correctamente en 'results/benchmark_java_results.csv'.");
+            } catch (IOException e) {
+                LOGGER.severe("Error al registrar resultados: " + e.getMessage());
+                System.exit(1);
+            }
             
         } catch (IOException e) {
             LOGGER.severe("Error: " + e.getMessage());

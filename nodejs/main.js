@@ -65,13 +65,25 @@ function multiplyMatrices(matrixA, matrixB) {
 function measureMultiplication(matrixA, matrixB, iterations) {
     const times = [];
     
+    // Calcular el incremento del 20%
+    const progressStep = Math.max(1, Math.floor(iterations / 5));
+    console.log(`Iniciando multiplicación de matrices (${iterations} iteraciones)...`);
+    
     for (let i = 0; i < iterations; i++) {
+        // Mostrar progreso cada 20% o si es la última iteración
+        if (i % progressStep === 0 || i === iterations - 1) {
+            const progressPercent = (i / iterations) * 100.0;
+            console.log(`Progreso: Iteración ${i + 1}/${iterations} (${progressPercent.toFixed(1)}%)`);
+        }
+        
         const startTime = performance.now();
         multiplyMatrices(matrixA, matrixB);
         const endTime = performance.now();
         // Convertir de milisegundos a segundos
         times.push((endTime - startTime) / 1000);
     }
+    
+    console.log("Multiplicación de matrices completada (100%).");
     
     const averageTime = times.reduce((a, b) => a + b, 0) / times.length;
     return [averageTime, times];
