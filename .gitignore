@@ -16,5 +16,4 @@ csharp/obj/
 csharp/bin/
 analysis/*.csv
 analysis/*.png
-analysis/*.txt
-!analysis/requirements.txt
+analysis/resultados_analisis/*
