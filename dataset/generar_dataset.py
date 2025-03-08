@@ -40,6 +40,6 @@ def generar_dataset(n_valores: List[int], semilla: int = 42) -> None:
         print(f"Dataset generado para n={n}: {archivo_A} y {archivo_B}")
 
 if __name__ == "__main__":
-    # Ejemplo: generar datasets para matrices 500x500 y 1000x1000
+    # Ejemplo: generar datasets para matrices 100x100, 250x250, 500x500, 750x750, 1000x1000, 5000x5000 y 10000x10000
     dimensiones = [100, 250, 500, 750, 1000, 5000, 10000]
     generar_dataset(dimensiones)
