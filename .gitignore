@@ -14,3 +14,7 @@ cpp/matrix_benchmark
 swift/.build/
 csharp/obj/
 csharp/bin/
+analysis/*.csv
+analysis/*.png
+analysis/*.txt
+!analysis/requirements.txt
