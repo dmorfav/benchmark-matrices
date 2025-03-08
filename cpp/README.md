@@ -61,14 +61,27 @@ C++,500,10,0.123456 0.123456 ...,0.123456
 
 Este archivo puede ser utilizado para comparar el rendimiento con otras implementaciones.
 
+## Estructura de directorios
+
+El programa espera la siguiente estructura de directorios:
+
+- `data/`: Contiene los archivos JSON con las matrices a multiplicar
+  - `matrix_A_{n}.json`: Matriz A de dimensión n×n
+  - `matrix_B_{n}.json`: Matriz B de dimensión n×n
+- `results/`: Directorio donde se guardarán los resultados (se crea automáticamente si no existe)
+
 ## Implementación
 
 El programa:
 
 1. Carga dos matrices cuadradas desde archivos JSON en el directorio `data/`
-2. Realiza la multiplicación de matrices utilizando el algoritmo naïve
-3. Mide el tiempo de ejecución para cada iteración
+2. Realiza la multiplicación de matrices utilizando el algoritmo naïve (tres bucles anidados)
+3. Mide el tiempo de ejecución para cada iteración utilizando `std::chrono`
 4. Calcula el tiempo promedio
 5. Registra los resultados en el archivo CSV
 
-La implementación utiliza funciones y bibliotecas estándar de C++ para maximizar la compatibilidad.
+La implementación incluye:
+- Un parser JSON simple y robusto para cargar matrices desde archivos
+- Manejo de errores para archivos inexistentes o con formato incorrecto
+- Soporte multiplataforma para la creación de directorios
+- Funciones para medición precisa de tiempos de ejecución
