@@ -3,3 +3,8 @@ results/
 go/matrix_benchmark
 java/target/
 kotlin/.gradle
+kotlin/build/
+kotlin/out/
+kotlin/gradle/
+kotlin/gradlew
+kotlin/gradlew.bat
