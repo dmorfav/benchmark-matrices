@@ -41,5 +41,5 @@ def generar_dataset(n_valores: List[int], semilla: int = 42) -> None:
 
 if __name__ == "__main__":
     # Ejemplo: generar datasets para matrices 500x500 y 1000x1000
-    dimensiones = [500, 1000]
+    dimensiones = [100, 250, 500, 750, 1000, 5000, 10000]
     generar_dataset(dimensiones)
