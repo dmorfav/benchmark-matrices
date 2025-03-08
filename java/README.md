@@ -39,11 +39,11 @@ Si prefieres compilar manualmente:
 mkdir -p target/classes
 
 # Compilar el código fuente
-javac -d target/classes src/Main.java
+javac -d target/classes src/benchmark/Main.java
 
 # Crear un JAR ejecutable
 cd target/classes
-jar cvfe ../benchmark.jar Main *.class
+jar cvfe ../benchmark.jar benchmark.Main benchmark/*.class
 cd ../..
 ```
 
@@ -63,10 +63,22 @@ Para ejecutar el benchmark con la configuración predeterminada (matrices de tam
 java -jar target/benchmark.jar
 ```
 
+O si prefieres ejecutar directamente la clase:
+
+```bash
+java -cp target/classes benchmark.Main
+```
+
 Para especificar el tamaño de las matrices y el número de iteraciones:
 
 ```bash
 java -jar target/benchmark.jar --n 1000 --iterations 5
+```
+
+O con la clase directamente:
+
+```bash
+java -cp target/classes benchmark.Main --n 1000 --iterations 5
 ```
 
 ## Parámetros
@@ -84,3 +96,10 @@ Java,500,10,0.123456 0.123457 ...,0.123456
 ```
 
 El archivo incluye el lenguaje, tamaño de la matriz, número de iteraciones, tiempos individuales de cada iteración y el tiempo promedio.
+
+Benchmark de multiplicación de matrices en Java
+Cargando matrices de dimensión 500 desde el dataset...
+Ejecutando benchmark con 10 iteraciones...
+Tiempos (segundos): [0.112016, 0.107376, 0.103522, 0.105495, 0.100741, 0.101784, 0.101396, 0.100746, 0.100676, 0.100635]
+Tiempo promedio: 0.103439 segundos
+Resultados registrados correctamente en 'results/benchmark_java_results.csv'.

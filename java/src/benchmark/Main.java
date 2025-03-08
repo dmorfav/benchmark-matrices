@@ -1,6 +1,6 @@
-import java.io.BufferedReader;
+package benchmark;
+
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,6 +8,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Implementación naïve de la multiplicación de matrices en Java.
@@ -15,6 +20,21 @@ import java.util.List;
  * Usa solo funcionalidades nativas de Java, sin bibliotecas externas.
  */
 public class Main {
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
+    
+    static {
+        // Configurar formato simplificado para el logger
+        LOGGER.setUseParentHandlers(false);
+        ConsoleHandler handler = new ConsoleHandler();
+        handler.setFormatter(new Formatter() {
+            @Override
+            public String format(LogRecord logRecord) {
+                return logRecord.getMessage() + "\n";
+            }
+        });
+        LOGGER.addHandler(handler);
+    }
+
     /**
      * Carga una matriz desde un archivo JSON usando solo funciones nativas.
      * 
@@ -23,7 +43,6 @@ public class Main {
      */
     public static double[][] loadMatrix(String filePath) {
         try {
-            // Leer todo el contenido del archivo
             String jsonContent = Files.readString(Path.of(filePath));
             
             // Limpiar espacios en blanco innecesarios
@@ -90,13 +109,13 @@ public class Main {
             
             return result;
         } catch (IOException e) {
-            System.out.println("Error: El archivo '" + filePath + "' no existe.");
+            LOGGER.severe("Error: El archivo '" + filePath + "' no existe.");
             System.exit(1);
         } catch (NumberFormatException e) {
-            System.out.println("Error: El archivo contiene valores no numéricos: " + e.getMessage());
+            LOGGER.severe("Error: El archivo contiene valores no numéricos: " + e.getMessage());
             System.exit(1);
         } catch (Exception e) {
-            System.out.println("Error al procesar el archivo JSON: " + e.getMessage());
+            LOGGER.severe("Error al procesar el archivo JSON: " + e.getMessage());
             e.printStackTrace();
             System.exit(1);
         }
@@ -136,20 +155,19 @@ public class Main {
      */
     public static MeasurementResult measureMultiplication(double[][] matrixA, double[][] matrixB, int iterations) {
         List<Double> times = new ArrayList<>();
+        double totalTime = 0;
         
         for (int i = 0; i < iterations; i++) {
             long startTime = System.nanoTime();
             multiplyMatrices(matrixA, matrixB);
             long endTime = System.nanoTime();
-            double elapsedTimeInSeconds = (endTime - startTime) / 1_000_000_000.0;
-            times.add(elapsedTimeInSeconds);
+            
+            double executionTime = (endTime - startTime) / 1e9; // Convertir a segundos
+            times.add(executionTime);
+            totalTime += executionTime;
         }
         
-        double averageTime = 0;
-        for (Double time : times) {
-            averageTime += time;
-        }
-        averageTime /= times.size();
+        double averageTime = totalTime / iterations;
         return new MeasurementResult(averageTime, times);
     }
 
@@ -209,7 +227,7 @@ public class Main {
             }
         }
         
-        System.out.println("Benchmark de multiplicación de matrices en Java");
+        LOGGER.info("Benchmark de multiplicación de matrices en Java");
         
         try {
             // Construir rutas relativas para acceder a los datasets
@@ -218,33 +236,34 @@ public class Main {
             
             // Verificar si el directorio de datos existe
             if (!dataDir.exists()) {
-                System.out.println("Error: El directorio de datos '" + dataDir.getPath() + "' no existe.");
+                LOGGER.severe("Error: El directorio de datos '" + dataDir.getPath() + "' no existe.");
                 System.exit(1);
             }
             
             String matrixAFile = new File(dataDir, "matrix_A_" + n + ".json").getPath();
             String matrixBFile = new File(dataDir, "matrix_B_" + n + ".json").getPath();
             
-            System.out.println("Cargando matrices de dimensión " + n + " desde el dataset...");
+            LOGGER.info("Cargando matrices de dimensión " + n + " desde el dataset...");
             
             double[][] matrixA = loadMatrix(matrixAFile);
             double[][] matrixB = loadMatrix(matrixBFile);
             
-            System.out.println("Ejecutando benchmark con " + iterations + " iteraciones...");
+            LOGGER.info("Ejecutando benchmark con " + iterations + " iteraciones...");
             MeasurementResult result = measureMultiplication(matrixA, matrixB, iterations);
             
-            System.out.println("Tiempos de cada iteración (en segundos):");
-            for (double t : result.times) {
-                System.out.printf("%.6f%n", t);
-            }
-            System.out.printf("Tiempo promedio: %.6f segundos%n", result.averageTime);
+            // Mostrar los tiempos de iteración de forma más compacta
+            String tiemposFormateados = result.times.stream()
+                .map(t -> String.format("%.6f", t))
+                .collect(Collectors.joining(", "));
+            LOGGER.info("Tiempos (segundos): [" + tiemposFormateados + "]");
+            LOGGER.info("Tiempo promedio: " + String.format("%.6f", result.averageTime) + " segundos");
             
             // Registrar resultados para su posterior comparación
             registrarResultados(n, iterations, result.times, result.averageTime);
-            System.out.println("Resultados registrados correctamente en 'results/benchmark_java_results.csv'.");
+            LOGGER.info("Resultados registrados correctamente en 'results/benchmark_java_results.csv'.");
             
         } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.severe("Error: " + e.getMessage());
             e.printStackTrace();
         }
     }

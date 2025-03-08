@@ -7,14 +7,14 @@ echo "Compilando el proyecto Java..."
 mkdir -p target/classes
 
 # Compilar el código fuente
-javac -d target/classes src/Main.java
+javac -d target/classes src/benchmark/Main.java
 
 if [ $? -eq 0 ]; then
     echo "Compilación exitosa"
     
     # Crear un JAR ejecutable
     cd target/classes
-    jar cvfe ../benchmark.jar Main *.class
+    jar cvfe ../benchmark.jar benchmark.Main benchmark/*.class
     cd ../..
     
     echo ""
@@ -22,6 +22,9 @@ if [ $? -eq 0 ]; then
     echo ""
     echo "Para ejecutar el benchmark, usa:"
     echo "java -jar target/benchmark.jar"
+    echo ""
+    echo "O directamente:"
+    echo "java -cp target/classes benchmark.Main"
     echo ""
     echo "Para especificar parámetros:"
     echo "java -jar target/benchmark.jar --n 500 --iterations 10"
