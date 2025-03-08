@@ -1,0 +1,15 @@
+{
+  "name": "matrix-multiplication-benchmark",
+  "version": "1.0.0",
+  "description": "Benchmark de multiplicación de matrices en Node.js",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Daniel Morfa",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^9.4.0"
+  }
+} 
