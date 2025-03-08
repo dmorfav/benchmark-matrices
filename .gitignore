@@ -10,3 +10,4 @@ kotlin/gradlew
 kotlin/gradlew.bat
 *.class
 nodejs/node_modules/
+cpp/matrix_benchmark
